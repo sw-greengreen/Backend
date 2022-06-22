@@ -31,4 +31,4 @@ logging.level:
 ## 로컬 경로는 각자 알아서 바꿔줘야 함!!!!!!중요해
 file:
   upload:
-    location: /Users/ksl2950/Desktop/2022_sw_hackathon/Frontend/public/images
+    location: /Users/ksl2950/Desktop/2022_sw_hackathon/Frontend/public/img
