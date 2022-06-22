@@ -27,18 +27,16 @@ public class PostSearchRepository {
 
     // 찾아주세요
     public List<Post> findPostByLost(){
-        return em.createQuery("select m " +
-                "from Post m " +
-                "where m.postType =:postType", Post.class)
+        return em.createQuery("select p " +
+                "from Post p join fetch p.user where p.postType =:postType", Post.class)
                 .setParameter("postType", PostType.LOST)
                 .getResultList();
     }
 
     // 찾았어요
     public List<Post> findPostByDiscovery(){
-        return em.createQuery("select m " +
-                "from Post m " +
-                "where m.postType =:postType", Post.class)
+        return em.createQuery("select p " +
+                "from Post p join fetch p.user where p.postType =:postType", Post.class)
                 .setParameter("postType", PostType.DISCOVERY)
                 .getResultList();
     }
