@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -44,7 +45,7 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private ResolvingStatus resolvingStatus;
 
-    private boolean isAnonymous;
+    private String isAnonymous;
 
     //==게시물 생성 메서드==//
     public static Post createPost(CreatePostDto createPostDto, User user){
@@ -57,7 +58,7 @@ public class Post {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .hashtag(createPostDto.getHashtag())
-                .isAnonymous(createPostDto.isAnonymous())
+                .isAnonymous(createPostDto.getIsAnonymous())
                 .build();
 
         return post;
@@ -70,6 +71,6 @@ public class Post {
         this.photo = updatePostDto.getPhoto();
         this.hashtag = updatePostDto.getHashtag();
         this.updatedAt = LocalDateTime.now();
-        this.isAnonymous = updatePostDto.isAnonymous();
+        this.isAnonymous = updatePostDto.getIsAnonymous();
     }
 }

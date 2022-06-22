@@ -10,18 +10,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class PostController {
     private final PostService postService;
 
     // 게시물 등록
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/api/v1/post")
-    public Response createPost(@RequestBody @Valid CreatePostDto createPostDto){
+    public Response createPost(@RequestBody @Valid CreatePostDto createPostDto) throws Exception{
         Long id = postService.savePost(createPostDto);
         Post post = postService.findOne(id);
         return new Response(201,true,"created post successfully", post);
+//        return "hi";
+
     }
 
     // 게시물 조회 by post id

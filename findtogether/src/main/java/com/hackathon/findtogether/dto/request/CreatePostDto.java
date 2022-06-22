@@ -19,7 +19,7 @@ public class CreatePostDto {
     private String photo;
     private String hashtag;
     private ResolvingStatus resolvingStatus;
-    private boolean isAnonymous;
+    private String isAnonymous;
 
     public static Post toEntity(CreatePostDto createPostDto) {
         Post post;
@@ -30,8 +30,8 @@ public class CreatePostDto {
                 .updatedAt(LocalDateTime.now())
                 .photo(createPostDto.getPhoto())
                 .hashtag(createPostDto.getHashtag())
+                .isAnonymous(createPostDto.getIsAnonymous())
                 .resolvingStatus(createPostDto.getResolvingStatus())
-                .isAnonymous(createPostDto.isAnonymous())
                 .build();
         return post;
     }
