@@ -40,8 +40,8 @@ public class PostService {
     @Transactional
     public Long savePost(CreatePostDto createPostDto){
 
-        // 사용자 정보 가져오기핍
-        User user = userRepository.findByUsername("보핍").get();
+        // 사용자 정보 가져오기
+        User user = userRepository.findByUsername(createPostDto.getUsername()).get();
 
         //게시물 생성
         Post post = Post.createPost(createPostDto,user);
