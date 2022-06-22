@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Transactional
 class PostServiceTest {
 
     @Autowired PostService postService;
@@ -45,7 +44,7 @@ class PostServiceTest {
                 .title("물건 찾아용")
                 .content("찾아주세요..")
                 .hashtag("#지갑")
-                .isAnonymous(true)
+//                .isAnonymous(true)
                 .photo("url")
                 .build();
         Post post = CreatePostDto.toEntity(createPostDto);

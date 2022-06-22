@@ -18,6 +18,6 @@ public class UpdatePostDto {
     private LocalDateTime updatedAt;
     private String hashtag;
     private ResolvingStatus resolvingStatus;
-    private boolean isAnonymous;
+    private String isAnonymous;
 
 }
