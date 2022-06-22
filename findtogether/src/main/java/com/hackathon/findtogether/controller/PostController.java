@@ -28,7 +28,6 @@ public class PostController {
         Long id = postService.savePost(createPostDto);
         Post post = postService.findOne(id);
         return new Response(201,true,"created post successfully", post);
-//        return "hi";
 
     }
 

@@ -3,21 +3,21 @@ package com.hackathon.findtogether.service;
 import com.hackathon.findtogether.domain.File;
 import com.hackathon.findtogether.util.FileUploadProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -43,6 +43,7 @@ public class FileService {
     public String saveFile(MultipartFile multipartFile) {
 
         String fileName = multipartFile.getOriginalFilename();
+        fileName = LocalDateTime.now()+"_"+fileName;
         Path location = this.dirLocation.resolve(fileName);
         try {
             /* 실제 파일이 upload 되는 부분 */
@@ -54,19 +55,21 @@ public class FileService {
         return fileName;
     }
 
-//    // 파일명으로 파일 찾고 리소스 반환
-//    public Resource loadFile(String fileName) throws FileNotFoundException {
-//
-//        try {
-//            Path file = this.dirLocation.resolve(fileName).normalize();
-//            Resource resource = new UrlResource(file.toUri());
-//
-//            if(resource.exists() || resource.isReadable()) {
-//                return resource;
-//            }else {
-//                throw new FileNotFoundException("Could not find file");
-//            }
-//        } catch (MalformedURLException e) {
-//            throw new FileNotFoundException("Could not download file");
-//        }
+    // 파일명으로 파일 찾고 리소스 반환
+    public Resource loadFile(String fileName) throws FileNotFoundException {
+
+        try {
+            Path file = this.dirLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new FileNotFoundException("Could not find file");
+            }
+        } catch (MalformedURLException e) {
+            throw new FileNotFoundException("Could not download file");
+        }
+
+    }
 }
