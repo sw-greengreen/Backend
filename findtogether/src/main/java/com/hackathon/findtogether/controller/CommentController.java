@@ -1,0 +1,47 @@
+package com.hackathon.findtogether.controller;
+
+import com.hackathon.findtogether.domain.Comment;
+import com.hackathon.findtogether.dto.request.CreateCommentDto;
+import com.hackathon.findtogether.dto.request.UpdateCommentDto;
+import com.hackathon.findtogether.service.CommentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+@RequiredArgsConstructor
+@RestController
+public class CommentController {
+
+    private final CommentService commentService;
+
+    //댓글 등록
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/post/{postId}/comment")
+    public Response createComment(@RequestBody @Valid CreateCommentDto createCommentDto) throws Exception {
+        Long commentId = commentService.saveComment(createCommentDto);
+        Comment comment = commentService.findOne(commentId);
+        return new Response(201,true,"created comment successfully", comment);
+    }
+
+    //댓글 수정
+    @PutMapping("/post/{postId}/comment/{commentId}")
+    public Response updateComment(@PathVariable Long postId,
+                                  @PathVariable Long commentId,
+                               @RequestBody @Valid UpdateCommentDto updateCommentDto) {
+
+        commentService.updateComment(postId, commentId, updateCommentDto);
+        Comment comment = commentService.findOne(commentId);
+        return new Response(200,true,"update comment successfully", comment);
+    }
+
+    //댓글 삭제
+    @DeleteMapping("/post/{postId}/comment/{commentId}")
+    public Response deletePost(@PathVariable Long postId,
+                               @PathVariable Long commentId) {
+
+        commentService.removeComment(postId, commentId);
+        return new Response(200,true,"delete comment successfully", commentId);
+    }
+}
