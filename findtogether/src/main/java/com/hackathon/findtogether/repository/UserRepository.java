@@ -33,7 +33,7 @@ public class UserRepository {
 //                .getResultStream().findFirst();
 //    }
 
-    public Optional<User> findByLoginId(String username) {
+    public Optional<User> findByUsername(String username) {
         return this.findAll().stream()
                 .filter(u -> u.getUsername().equals(username))
                 .findFirst();
