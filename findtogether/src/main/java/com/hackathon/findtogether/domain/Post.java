@@ -42,9 +42,15 @@ public class Post {
 
     private String hashtag;
 
+    // 게시물 타입 (잃어버림 , 발견)
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
+
+    // 분실물 (해결, 미해결)
     @Enumerated(EnumType.STRING)
     private ResolvingStatus resolvingStatus;
 
+    // 익명 여부
     private String isAnonymous;
 
     //==게시물 생성 메서드==//
@@ -58,6 +64,8 @@ public class Post {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .hashtag(createPostDto.getHashtag())
+                .postType(createPostDto.getPostType())
+                .resolvingStatus(ResolvingStatus.WAITING)
                 .isAnonymous(createPostDto.getIsAnonymous())
                 .build();
 
@@ -72,5 +80,7 @@ public class Post {
         this.hashtag = updatePostDto.getHashtag();
         this.updatedAt = LocalDateTime.now();
         this.isAnonymous = updatePostDto.getIsAnonymous();
+        this.resolvingStatus = updatePostDto.getResolvingStatus();
+        this.postType = updatePostDto.getPostType();
     }
 }
