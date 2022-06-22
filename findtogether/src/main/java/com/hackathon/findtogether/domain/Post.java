@@ -35,6 +35,7 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    // 이미지 파일 경로
     private String photo;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
