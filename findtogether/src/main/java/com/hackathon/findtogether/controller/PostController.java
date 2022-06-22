@@ -31,6 +31,8 @@ public class PostController {
     @GetMapping("/api/v1/post/{id}")
     public Response getPostByUsername(@PathVariable Long id){
         Post post = postService.findOne(id);
+        if (post == null)
+            return new Response(404,false,"not found post", "");
         return new Response(200,true,"found post successfully", post);
     }
 
