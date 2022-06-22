@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hackathon.findtogether.dto.request.CreatePostDto;
 import com.hackathon.findtogether.dto.request.UpdatePostDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,6 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user; // 연관관계의 주인
 
     @Column(nullable = false)
@@ -35,6 +35,7 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    // 이미지 파일 경로
     private String photo;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -46,6 +47,7 @@ public class Post {
     private String hashtag;
 
     // 게시물 타입 (잃어버림 , 발견)
+    @Schema(description = "찾아주세요, 찾았어요 필터", defaultValue = "LOST", allowableValues = {"LOST", "DISCOVERY"})
     @Enumerated(EnumType.STRING)
     private PostType postType;
 

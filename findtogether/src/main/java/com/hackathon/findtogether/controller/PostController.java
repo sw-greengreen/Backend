@@ -5,13 +5,19 @@ import com.hackathon.findtogether.dto.request.CreatePostDto;
 import com.hackathon.findtogether.dto.request.UpdatePostDto;
 import com.hackathon.findtogether.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class PostController {
     private final PostService postService;
 
@@ -22,7 +28,6 @@ public class PostController {
         Long id = postService.savePost(createPostDto);
         Post post = postService.findOne(id);
         return new Response(201,true,"created post successfully", post);
-//        return "hi";
 
     }
 
