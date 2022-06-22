@@ -1,5 +1,6 @@
 package com.hackathon.findtogether.dto.request;
 
+import com.hackathon.findtogether.domain.PostType;
 import com.hackathon.findtogether.domain.ResolvingStatus;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class UpdatePostDto {
     private String photo;
     private LocalDateTime updatedAt;
     private String hashtag;
+    private PostType postType;
     private ResolvingStatus resolvingStatus;
     private String isAnonymous;
 
