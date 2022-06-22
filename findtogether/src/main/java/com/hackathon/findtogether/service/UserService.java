@@ -27,7 +27,7 @@ public class UserService {
 
     //아이디 중복 체크
     private void validateDuplicateUser(User user) {
-        Optional<User> findUser = userRepository.findByLoginId(user.getUsername());
+        Optional<User> findUser = userRepository.findByUsername(user.getUsername());
         if (!findUser.isEmpty()) {
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
         }
@@ -35,7 +35,7 @@ public class UserService {
 
     //로그인
     public User login(LoginUserDto user) {
-        return userRepository.findByLoginId(user.getUsername())
+        return userRepository.findByUsername(user.getUsername())
                 .filter(u -> u.getPassword().equals(user.getPassword()))
                 .orElse(null);
     }
