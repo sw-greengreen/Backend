@@ -2,6 +2,8 @@ package com.hackathon.findtogether.service;
 
 import com.hackathon.findtogether.domain.User;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
+import com.hackathon.findtogether.exception.CustomException;
+import com.hackathon.findtogether.exception.ErrorCode;
 import com.hackathon.findtogether.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class UserService {
     private void validateDuplicateUser(User user) {
         Optional<User> findUser = userRepository.findByUsername(user.getUsername());
         if (!findUser.isEmpty()) {
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
     }
 
