@@ -1,6 +1,7 @@
 package com.hackathon.findtogether.service;
 
 import com.hackathon.findtogether.domain.Post;
+import com.hackathon.findtogether.dto.request.PostSearchDto;
 import com.hackathon.findtogether.repository.PostRepository;
 import com.hackathon.findtogether.repository.PostSearchRepository;
 import com.hackathon.findtogether.repository.UserRepository;
@@ -27,5 +28,11 @@ public class PostSearchService {
     public List<Post> findPostByDiscovery(){
         return postSearchRepository.findPostByDiscovery();
     }
+
+    // 해시태그 또는 제목으로 조회
+    public List<Post> findPostByKeyword(String keyword){
+        return postSearchRepository.findPostByKeyword(keyword);
+    }
+    // 최신순, 조회순, 해결, 미해결로 조회
 
 }
