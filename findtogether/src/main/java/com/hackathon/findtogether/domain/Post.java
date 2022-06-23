@@ -70,7 +70,7 @@ public class Post {
                 .updatedAt(LocalDateTime.now())
                 .hashtag(createPostDto.getHashtag())
                 .postType(createPostDto.getPostType())
-                .resolvingStatus(ResolvingStatus.WAITING)
+                .resolvingStatus(createPostDto.getResolvingStatus())
                 .isAnonymous(createPostDto.getIsAnonymous())
                 .build();
 

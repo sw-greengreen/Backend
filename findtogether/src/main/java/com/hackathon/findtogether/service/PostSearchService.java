@@ -34,5 +34,7 @@ public class PostSearchService {
         return postSearchRepository.findPostByKeyword(keyword);
     }
     // 최신순, 조회순, 해결, 미해결로 조회
-
+    public List<Post> findPostBySortType(String sortType){
+        return postSearchRepository.findPostBySortType(sortType);
+    }
 }
