@@ -29,8 +29,7 @@ public class ChatMessageService {
     }
 
     public long countNewMessages(String senderId, String recipientId) {
-        return chatMessageRepository.countBySenderIdAndReceiverIdAndStatus(
-                senderId, recipientId, MessageStatus.RECEIVED);
+        return chatMessageRepository.countBySenderIdAndReceiverIdAndStatus(senderId, recipientId, MessageStatus.RECEIVED);
     }
 
     public List<ChatMessage> findChatMessages(String senderId, String receiverId) {
@@ -68,6 +67,6 @@ public class ChatMessageService {
     @Transactional
     public void updateStatuses(String senderId, String receiverId, MessageStatus status) {
         ChatMessage chatMessage = chatMessageJpqlRepository.findBySenderIdAndReceiverId(senderId, receiverId);
-        chatMessage.setStatus(status);
+        chatMessage.setStatus(status); //변경감지
     }
 }

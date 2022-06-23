@@ -13,8 +13,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
 
-    public Optional<String> getChatId(
-            String senderId, String receiverId, boolean createIfNotExist) {
+    public Optional<String> getChatId(String senderId, String receiverId, boolean createIfNotExist) {
 
         return chatRoomRepository.findBySenderIdAndReceiverId(senderId, receiverId)
                 .map(ChatRoom::getChatId)

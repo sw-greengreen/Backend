@@ -5,7 +5,6 @@ import com.hackathon.findtogether.domain.ChatNotification;
 import com.hackathon.findtogether.service.ChatMessageService;
 import com.hackathon.findtogether.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,8 +23,7 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
-        var chatId = chatRoomService
-                .getChatId(chatMessage.getSenderId(), chatMessage.getReceiverId(), true);
+        var chatId = chatRoomService.getChatId(chatMessage.getSenderId(), chatMessage.getReceiverId(), true);
         chatMessage.setChatId(chatId.get());
 
         ChatMessage saved = chatMessageService.save(chatMessage);
@@ -43,8 +41,7 @@ public class ChatController {
             @PathVariable String senderId,
             @PathVariable String recipientId) {
 
-        return ResponseEntity
-                .ok(chatMessageService.countNewMessages(senderId, recipientId));
+        return ResponseEntity.ok(chatMessageService.countNewMessages(senderId, recipientId));
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
