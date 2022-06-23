@@ -1,6 +1,8 @@
 package com.hackathon.findtogether.repository;
 
 import com.hackathon.findtogether.domain.User;
+import com.hackathon.findtogether.dto.request.FindPasswordDto;
+import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -37,5 +39,19 @@ public class UserRepository {
         return this.findAll().stream()
                 .filter(u -> u.getUsername().equals(username))
                 .findFirst();
+    }
+
+    public Optional<User> findByNameAndPhone(FindUsernameDto findUsernameDto) {
+        return em.createQuery("select u from User u where u.name = :name and u.phone = :phone", User.class)
+                .setParameter("name", findUsernameDto.getName())
+                .setParameter("phone", findUsernameDto.getPhone())
+                .getResultStream().findFirst();
+    }
+
+    public Optional<User> findByUsernameAndPhone(FindPasswordDto findPasswordDto) {
+        return em.createQuery("select u from User u where u.username = :username and u.phone = :phone", User.class)
+                .setParameter("username", findPasswordDto.getUsername())
+                .setParameter("phone", findPasswordDto.getPhone())
+                .getResultStream().findFirst();
     }
 }
