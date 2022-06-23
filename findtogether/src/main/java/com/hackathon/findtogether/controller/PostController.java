@@ -14,11 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 @Slf4j
 public class PostController {
+
     private final PostService postService;
 
     // 게시물 등록
@@ -31,10 +33,20 @@ public class PostController {
 
     }
 
+    // 게시물 전체 조회
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/api/v1/post/all")
+    public Response getPostByAll() throws Exception{
+        List<Post> posts = postService.findAllPost();
+        if (posts == null)
+            return new Response(404,false,"not found post", "");
+        return new Response(200,true,"found post successfully", posts);
+    }
+
     // 게시물 조회 by post id
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/api/v1/post/{id}")
-    public Response getPostByUsername(@PathVariable Long id){
+    public Response getPostByUsername(@PathVariable Long id) throws Exception{
         Post post = postService.findOne(id);
         if (post == null)
             return new Response(404,false,"not found post", "");
@@ -44,7 +56,7 @@ public class PostController {
     // 게시물 수정
     @PutMapping("/api/v1/post/{id}")
     public Response updatePost(@PathVariable Long id,
-                               @RequestBody @Valid UpdatePostDto updatePostDto) {
+                               @RequestBody @Valid UpdatePostDto updatePostDto) throws Exception{
         postService.updatePost(id, updatePostDto);
         Post post = postService.findOne(id);
         return new Response(200,true,"update post successfully", post);
@@ -52,7 +64,7 @@ public class PostController {
 
     // 게시물 삭제
     @DeleteMapping("/api/v1/post/{id}")
-    public Response deletePost(@PathVariable Long id){
+    public Response deletePost(@PathVariable Long id) throws Exception{
         postService.removePost(id);
         return new Response(200,true,"delete post successfully", id);
     }

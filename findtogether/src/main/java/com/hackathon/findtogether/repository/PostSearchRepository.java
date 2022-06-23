@@ -64,4 +64,19 @@ public class PostSearchRepository {
     }
     // 미해결
 
+    // 검색 ( 제목 또는 해시태그 )
+    public List<Post> findPostByKeyword(String keyword) {
+        if (keyword.charAt(0) == '#'){
+            return em.createQuery("select p from Post p where p.hashtag =:hashtag",Post.class)
+                    .setParameter("hashtag",keyword)
+                    .getResultList();
+
+        } else{
+            return em.createQuery("select p from Post p " +
+                    "where p.title like CONCAT('%',:title,'%')",Post.class)
+                    .setParameter("title",keyword)
+                    .getResultList();
+        }
+    }
+
 }

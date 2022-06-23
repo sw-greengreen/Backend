@@ -35,4 +35,13 @@ public class PostSearchController {
         }
 
     }
+
+    // 게시물 조회
+    // 제목 또는 해시태그
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/api/v1/search/posts")
+    public Response getPostByKeyword(@RequestParam(value="keyword") String keyword){
+        List<Post> posts =postSearchService.findPostByKeyword(keyword);
+        return new Response(200,true,"found post successfully", posts);
+    }
 }

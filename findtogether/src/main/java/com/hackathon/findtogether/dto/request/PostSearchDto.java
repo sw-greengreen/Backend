@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @Getter
 public class PostSearchDto {
-    private String keyword; // # 붙으면 해시태그, 안붙으면 제목
-    private String sortingType; //LATEST, OLDEST
+    private String postType; // LOST, DISCOVERY
+    private String keyword; // 해시태그 or 제목
+    private String sortingType; // LATEST, OLDEST, WAITING, COMPLETION
 }
