@@ -6,6 +6,7 @@ import com.hackathon.findtogether.dto.request.FindPasswordDto;
 import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
 import com.hackathon.findtogether.dto.request.SignupUserDto;
+import com.hackathon.findtogether.dto.response.LoginResultDto;
 import com.hackathon.findtogether.service.UserService;
 import com.hackathon.findtogether.util.SessionManager;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +46,9 @@ public class UserController {
 
         if (requestUser == null)
             return new Response(400, false, "로그인에 실패하였습니다. 해당 유저가 존재하지 않습니다.", requestUser);
-        return new Response(200, true, "로그인에 성공하였습니다.", requestUser);
+
+        LoginResultDto loginResultDto = new LoginResultDto(requestUser);
+        return new Response(200, true, "로그인에 성공하였습니다.", loginResultDto);
     }
 
     @ResponseStatus(HttpStatus.OK)
