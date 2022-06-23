@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -46,11 +48,18 @@ public class AlarmService {
         return alarm.getId();
     }
 
-    // 알람 상태 변경
+    // 알람 클릭시 읽음으로 상태 변경
     @Transactional
     public void updateAlarm(Long alarmId, UpdateAlarmDto updateAlarmDto) {
         Alarm alarm = alarmRepository.findOne(alarmId);
-        alarm.updateAlarm(updateAlarmDto);
+        alarm.updateAlarm();
         alarmRepository.save(alarm);
+    }
+
+    public List<Alarm> findAlarmsByUsername(String username) {
+        return alarmRepository.findAlarmByUsername(username);
+    }
+    public List<Alarm> findAlarmsByType(String alarmType) {
+        return alarmRepository.findAlarmByAlarmType(alarmType);
     }
 }

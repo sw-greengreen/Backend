@@ -32,9 +32,10 @@ public class Alarm {
 
     private int alarmStatus; // 0(읽음) 1(안읽음)
 
-    public static Alarm createAlarm(CreateAlarmDto createAlarmDto,User user) {
+    public static Alarm createAlarm(CreateAlarmDto createAlarmDto, User user) {
         Alarm alarm;
         alarm = Alarm.builder()
+                .user(user)
                 .alarmType(createAlarmDto.getAlarmType())
                 .alarmStatus(createAlarmDto.getAlarmStatus())
                 .message(createAlarmDto.getMessage())
@@ -42,9 +43,7 @@ public class Alarm {
         return alarm;
     }
 
-    public void updateAlarm(UpdateAlarmDto updateAlarmDto) {
-        this.alarmType = updateAlarmDto.getAlarmType();
-        this.alarmStatus = updateAlarmDto.getAlarmStatus();
-        this.message = updateAlarmDto.getMessage();
+    public void updateAlarm() {
+        this.alarmStatus = 0;
     }
 }
