@@ -1,11 +1,15 @@
 package com.hackathon.findtogether.service;
 
+import com.hackathon.findtogether.domain.Alarm;
+import com.hackathon.findtogether.domain.AlarmType;
 import com.hackathon.findtogether.domain.User;
+import com.hackathon.findtogether.dto.request.CreateAlarmDto;
 import com.hackathon.findtogether.dto.request.FindPasswordDto;
 import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
 import com.hackathon.findtogether.exception.CustomException;
 import com.hackathon.findtogether.exception.ErrorCode;
+import com.hackathon.findtogether.repository.AlarmRepository;
 import com.hackathon.findtogether.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
 
     //회원가입
     @Transactional
@@ -72,8 +77,20 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePointUser(Long userId) {
-        User user = userRepository.findOne(userId);
+    public void updatePointUser(String username) {
+        User user = userRepository.findByUsername(username).get();
         user.addPoint(10); //변경 감지
+
+        // 포인트 추가 시 당사자에게 알림 생성
+        CreateAlarmDto alarmDto = CreateAlarmDto.builder()
+                .username(username)
+                .alarmType(AlarmType.POINT)
+                .alarmStatus(1)
+                .message("분실물을 찾아주셨군요! 포인트가 추가되었어요:)")
+                .build();
+
+        Alarm alarm = Alarm.createAlarm(alarmDto,user);
+        alarmRepository.save(alarm);
+
     }
 }

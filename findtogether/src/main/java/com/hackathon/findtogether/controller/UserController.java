@@ -99,11 +99,11 @@ public class UserController {
 
     //사용자 포인트 수정 (댓글 채택 시 +10)
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/auth/updatePoint/{userId}")
-    public Response updatePointUser(@PathVariable Long userId) throws Exception {
+    @PutMapping("/auth/updatePoint/{username}")
+    public Response updatePointUser(@PathVariable String username) throws Exception {
 
-        userService.updatePointUser(userId);
-        User user = userService.findById(userId);
+        userService.updatePointUser(username);
+        User user = userService.findByUsername(username);
         return new Response(200,true,"update user successfully", user);
     }
 }
