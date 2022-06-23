@@ -7,10 +7,13 @@ import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
 import com.hackathon.findtogether.dto.request.SignupUserDto;
 import com.hackathon.findtogether.service.UserService;
+import com.hackathon.findtogether.util.SessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -18,6 +21,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+    private final SessionManager sessionManager;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/auth/signup")
@@ -40,8 +44,20 @@ public class UserController {
         User requestUser = userService.login(userDto);
 
         if (requestUser == null)
-            return new Response(400, false, "로그인에 실패하였습니다. 해당 유저가 존재하지 않습니다.", userDto);
-        return new Response(200, true, "로그인에 성공하였습니다.", userDto);
+            return new Response(400, false, "로그인에 실패하였습니다. 해당 유저가 존재하지 않습니다.", requestUser);
+        return new Response(200, true, "로그인에 성공하였습니다.", requestUser);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/auth/loginSession")
+    public Response loginUserWithSession(@RequestBody @Valid LoginUserDto userDto, HttpServletResponse response) {
+        User requestUser = userService.login(userDto);
+
+        if (requestUser == null)
+            return new Response(400, false, "로그인에 실패하였습니다. 해당 유저가 존재하지 않습니다.", requestUser);
+
+        sessionManager.createSession(requestUser, response);
+        return new Response(200, true, "로그인에 성공하였습니다.", requestUser);
     }
 
     //아이디 찾기 -> 이름 전화번호 일치 -> 아이디 공개
