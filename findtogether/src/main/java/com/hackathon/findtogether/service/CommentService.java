@@ -28,8 +28,11 @@ public class CommentService {
     }
 
     //하나의 게시글에 있는 모든 댓글 조회
-    public List<Comment> findAllComment(Long post_id) {
-        return commentRepository.findAll(post_id);
+//    public List<Comment> findAllComment(Long post_id) {
+//        return commentRepository.findAll(post_id);
+//    }
+    public List<Comment> findAllCommentWithUser(Long postId) {
+        return commentRepository.findAllComment(postId);
     }
 
     //댓글 등록
