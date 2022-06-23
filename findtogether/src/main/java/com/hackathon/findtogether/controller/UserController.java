@@ -27,6 +27,7 @@ public class UserController {
                 .name(userDto.getName())
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
+                .phone(userDto.getPhone())
                 .point(0)
                 .achievement(UserStatus.BASIC)
                 .build();
