@@ -44,7 +44,9 @@ public class CommentRepository {
     public List<Comment> findAllComment(Long postId) {
         return em.createQuery(
                 "select c from Comment c" +
-                        " join fetch c.writer w", Comment.class)
+                        " join fetch c.writer w" +
+                        " where c.post.id = :postId", Comment.class)
+                .setParameter("postId", postId)
                 .getResultList();
     }
 
