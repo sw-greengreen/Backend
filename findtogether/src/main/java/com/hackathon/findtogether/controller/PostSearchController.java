@@ -44,4 +44,13 @@ public class PostSearchController {
         List<Post> posts =postSearchService.findPostByKeyword(keyword);
         return new Response(200,true,"found post successfully", posts);
     }
+
+    // 게시물 조회
+    // 최신순, 오래된순, 해결, 미해결
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/api/v1/sorting/posts")
+    public Response getPostBySorting(@RequestParam(value="sortType") String sortType){
+        List<Post> posts =postSearchService.findPostBySortType(sortType);
+        return new Response(200,true,"found post successfully", posts);
+    }
 }
