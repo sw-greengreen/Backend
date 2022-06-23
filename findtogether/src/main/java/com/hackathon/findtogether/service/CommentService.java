@@ -1,10 +1,10 @@
 package com.hackathon.findtogether.service;
 
-import com.hackathon.findtogether.domain.Comment;
-import com.hackathon.findtogether.domain.Post;
-import com.hackathon.findtogether.domain.User;
+import com.hackathon.findtogether.domain.*;
+import com.hackathon.findtogether.dto.request.CreateAlarmDto;
 import com.hackathon.findtogether.dto.request.CreateCommentDto;
 import com.hackathon.findtogether.dto.request.UpdateCommentDto;
+import com.hackathon.findtogether.repository.AlarmRepository;
 import com.hackathon.findtogether.repository.CommentRepository;
 import com.hackathon.findtogether.repository.PostRepository;
 import com.hackathon.findtogether.repository.UserRepository;
@@ -22,14 +22,18 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final AlarmRepository alarmRepository;
 
     public Comment findOne(Long commentId) {
         return commentRepository.findOnefindOneWithCommendId(commentId);
     }
 
     //하나의 게시글에 있는 모든 댓글 조회
-    public List<Comment> findAllComment(String post_id){
-        return commentRepository.findAll(post_id);
+//    public List<Comment> findAllComment(Long post_id) {
+//        return commentRepository.findAll(post_id);
+//    }
+    public List<Comment> findAllCommentWithUser(Long postId) {
+        return commentRepository.findAllComment(postId);
     }
 
     //댓글 등록
@@ -42,6 +46,20 @@ public class CommentService {
 
         Comment comment = Comment.createComment(createCommentDto, post, writer);
         commentRepository.save(comment);
+
+        // 댓글 등록시 게시자에게 알림 생성
+        User postWriter = userRepository.findOne(post.getUser().getId());
+
+        CreateAlarmDto alarmDto = CreateAlarmDto.builder()
+                .username(postWriter.getUsername())
+                .alarmType(AlarmType.COMMENT)
+                .alarmStatus(1)
+                .message("["+post.getTitle()+"]"+" 게시물에 새로운 댓글이 등록되었어요!")
+                .build();
+
+        Alarm alarm = Alarm.createAlarm(alarmDto,postWriter);
+        alarmRepository.save(alarm);
+
         return comment.getId();
     }
 

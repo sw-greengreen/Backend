@@ -35,9 +35,18 @@ public class CommentRepository {
 //        return post.getId();
 //    }
 
-    public List<Comment> findAll(String post_id) {
-        return em.createQuery("select c from Comment c where c.post.id = :post_id", Comment.class)
-                .setParameter("post_id", post_id)
+//    public List<Comment> findAll(Long post_id) {
+//        return em.createQuery("select c from Comment c where c.post.id = :post_id", Comment.class)
+//                .setParameter("post_id", post_id)
+//                .getResultList();
+//    }
+
+    public List<Comment> findAllComment(Long postId) {
+        return em.createQuery(
+                "select c from Comment c" +
+                        " join fetch c.writer w" +
+                        " where c.post.id = :postId", Comment.class)
+                .setParameter("postId", postId)
                 .getResultList();
     }
 

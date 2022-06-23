@@ -2,8 +2,8 @@ package com.hackathon.findtogether.repository;
 
 import com.hackathon.findtogether.domain.Post;
 import com.hackathon.findtogether.domain.PostType;
-import com.hackathon.findtogether.domain.QPost;
 
+import com.hackathon.findtogether.domain.QPost;
 import com.hackathon.findtogether.domain.ResolvingStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
@@ -41,28 +41,46 @@ public class PostSearchRepository {
                 .getResultList();
     }
 
-    // 최신순
-    public List<Post> findPostByLatest(){
+    public List<Post> findPostBySortType(String sortType){
         QPost p = new QPost("p");
 
-        List<Post> posts = queryFactory
-                .selectFrom(p)
-                .orderBy(p.createdAt.desc())
-                .fetch();
-        return posts;
-    }
+        // 최신 순
+        if (sortType.equals("LATEST")){
+            List<Post> posts = queryFactory
+                    .selectFrom(p)
+                    .orderBy(p.createdAt.desc())
+                    .fetch();
+            return posts;
+        }
 
-    // 해결
-    public List<Post> findPostByWaiting(){
-        QPost p = new QPost("p");
+        // 오래된 순
+        else if(sortType.equals("OLDEST")){
+            List<Post> posts = queryFactory
+                    .selectFrom(p)
+                    .orderBy(p.createdAt.asc())
+                    .fetch();
+            return posts;
+        }
+        // 해결
+        else if(sortType.equals("COMPLETION")){
+            List<Post> posts = queryFactory
+                    .selectFrom(p)
+                    .where(p.resolvingStatus.eq(ResolvingStatus.COMPLETION))
+                    .orderBy(p.createdAt.desc())
+                    .fetch();
+            return posts;
+        }
 
-        List<Post> posts = queryFactory
-                .selectFrom(p)
-                .orderBy(p.createdAt.desc())
-                .fetch();
-        return posts;
+        // 미해결
+        else{
+            List<Post> posts = queryFactory
+                    .selectFrom(p)
+                    .where(p.resolvingStatus.eq(ResolvingStatus.WAITING))
+                    .orderBy(p.createdAt.desc())
+                    .fetch();
+            return posts;
+        }
     }
-    // 미해결
 
     // 검색 ( 제목 또는 해시태그 )
     public List<Post> findPostByKeyword(String keyword) {
