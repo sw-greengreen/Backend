@@ -1,9 +1,12 @@
 package com.hackathon.findtogether.controller;
 
 import com.hackathon.findtogether.domain.Post;
+import com.hackathon.findtogether.domain.PostType;
+import com.hackathon.findtogether.domain.User;
 import com.hackathon.findtogether.dto.request.CreatePostDto;
 import com.hackathon.findtogether.dto.request.UpdatePostDto;
 import com.hackathon.findtogether.service.PostService;
+import com.hackathon.findtogether.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final UserService userService;
 
     // 게시물 등록
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,6 +33,18 @@ public class PostController {
     public Response createPost(@RequestBody @Valid CreatePostDto createPostDto) throws Exception{
         Long id = postService.savePost(createPostDto);
         Post post = postService.findOne(id);
+        User user = post.getUser();
+
+        if (post.getPostType() == PostType.DISCOVERY)
+            userService.downgradePointUser(user.getId());
+
+        if (user.getPointcount() >= 5)
+            userService.updateAchievementDetecter(user.getId());
+        else if (user.getPointcount() > -5 && user.getPointcount() < 5)
+            userService.updateAchievementBasic(user.getId());
+        else if (user.getPointcount() <= -5)
+            userService.updateAchievementLoser(user.getId());
+
         return new Response(201,true,"created post successfully", post);
 
     }
