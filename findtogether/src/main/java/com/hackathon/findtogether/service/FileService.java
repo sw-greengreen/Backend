@@ -43,7 +43,8 @@ public class FileService {
     public String saveFile(MultipartFile multipartFile) {
 
         String fileName = multipartFile.getOriginalFilename();
-        fileName = LocalDateTime.now()+"_"+fileName;
+        UUID one = UUID.randomUUID();
+        fileName = one+"_"+fileName;
         Path location = this.dirLocation.resolve(fileName);
         try {
             /* 실제 파일이 upload 되는 부분 */
