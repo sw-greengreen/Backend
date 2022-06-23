@@ -28,3 +28,6 @@ logging.level:
 file:
   upload:
     location: /C/inflearn/study/frontend/fe/public/img
+
+#session:
+#  setMaxInactiveInterval(1800); #1800sec
