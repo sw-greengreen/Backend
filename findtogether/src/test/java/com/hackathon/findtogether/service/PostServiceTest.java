@@ -34,7 +34,7 @@ class PostServiceTest {
                 .username("보핍")
                 .password("1234")
                 .point(30)
-                .achievement(UserStatus.VIP)
+                .achievement(UserStatus.BASIC)
                 .build();
 
         userService.join(user);

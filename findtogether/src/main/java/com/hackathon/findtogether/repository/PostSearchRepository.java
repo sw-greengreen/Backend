@@ -2,8 +2,8 @@ package com.hackathon.findtogether.repository;
 
 import com.hackathon.findtogether.domain.Post;
 import com.hackathon.findtogether.domain.PostType;
-import com.hackathon.findtogether.domain.QPost;
 
+import com.hackathon.findtogether.domain.QPost;
 import com.hackathon.findtogether.domain.ResolvingStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.AllArgsConstructor;
