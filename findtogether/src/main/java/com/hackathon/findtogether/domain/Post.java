@@ -1,15 +1,19 @@
 package com.hackathon.findtogether.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hackathon.findtogether.dto.request.CreatePostDto;
 import com.hackathon.findtogether.dto.request.UpdatePostDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -22,9 +26,8 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user; // 연관관계의 주인
 
     @Column(nullable = false)
@@ -33,18 +36,31 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
+    // 이미지 파일 경로
     private String photo;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
 
     private String hashtag;
 
+    // 게시물 타입 (잃어버림 , 발견)
+    @Schema(description = "찾아주세요, 찾았어요 필터", defaultValue = "LOST", allowableValues = {"LOST", "DISCOVERY"})
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
+
+    // 분실물 (해결, 미해결)
     @Enumerated(EnumType.STRING)
     private ResolvingStatus resolvingStatus;
 
-    private boolean isAnonymous;
+    // 익명 여부
+    private String isAnonymous;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     //==게시물 생성 메서드==//
     public static Post createPost(CreatePostDto createPostDto, User user){
@@ -57,7 +73,9 @@ public class Post {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .hashtag(createPostDto.getHashtag())
-                .isAnonymous(createPostDto.isAnonymous())
+                .postType(createPostDto.getPostType())
+                .resolvingStatus(ResolvingStatus.WAITING)
+                .isAnonymous(createPostDto.getIsAnonymous())
                 .build();
 
         return post;
@@ -70,6 +88,8 @@ public class Post {
         this.photo = updatePostDto.getPhoto();
         this.hashtag = updatePostDto.getHashtag();
         this.updatedAt = LocalDateTime.now();
-        this.isAnonymous = updatePostDto.isAnonymous();
+        this.isAnonymous = updatePostDto.getIsAnonymous();
+        this.resolvingStatus = updatePostDto.getResolvingStatus();
+        this.postType = updatePostDto.getPostType();
     }
 }

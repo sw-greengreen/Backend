@@ -1,5 +1,7 @@
 package com.hackathon.findtogether.dto.request;
 
+import com.hackathon.findtogether.domain.Post;
+import com.hackathon.findtogether.domain.PostType;
 import com.hackathon.findtogether.domain.ResolvingStatus;
 import lombok.*;
 
@@ -17,7 +19,23 @@ public class CreatePostDto {
     private String content;
     private String photo;
     private String hashtag;
+    private PostType postType;
     private ResolvingStatus resolvingStatus;
-    private boolean isAnonymous;
+    private String isAnonymous;
 
+    public static Post toEntity(CreatePostDto createPostDto) {
+        Post post;
+        post = Post.builder()
+                .title(createPostDto.getTitle())
+                .content(createPostDto.getContent())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .photo(createPostDto.getPhoto())
+                .hashtag(createPostDto.getHashtag())
+                .postType(createPostDto.getPostType())
+                .resolvingStatus(ResolvingStatus.WAITING)
+                .isAnonymous(createPostDto.getIsAnonymous())
+                .build();
+        return post;
+    }
 }

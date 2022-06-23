@@ -41,9 +41,7 @@ public class PostService {
     public Long savePost(CreatePostDto createPostDto){
 
         // 사용자 정보 가져오기
-        String username = "User 받아오기";
-        User user = userRepository.findByLoginId("aaa").get();
-
+        User user = userRepository.findByUsername(createPostDto.getUsername()).get();
 
         //게시물 생성
         Post post = Post.createPost(createPostDto,user);

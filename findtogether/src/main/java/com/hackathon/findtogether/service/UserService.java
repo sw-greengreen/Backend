@@ -1,6 +1,8 @@
 package com.hackathon.findtogether.service;
 
 import com.hackathon.findtogether.domain.User;
+import com.hackathon.findtogether.dto.request.FindPasswordDto;
+import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
 import com.hackathon.findtogether.exception.CustomException;
 import com.hackathon.findtogether.exception.ErrorCode;
@@ -29,7 +31,7 @@ public class UserService {
 
     //아이디 중복 체크
     private void validateDuplicateUser(User user) {
-        Optional<User> findUser = userRepository.findByLoginId(user.getUsername());
+        Optional<User> findUser = userRepository.findByUsername(user.getUsername());
         if (!findUser.isEmpty()) {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
@@ -37,7 +39,7 @@ public class UserService {
 
     //로그인
     public User login(LoginUserDto user) {
-        return userRepository.findByLoginId(user.getUsername())
+        return userRepository.findByUsername(user.getUsername())
                 .filter(u -> u.getPassword().equals(user.getPassword()))
                 .orElse(null);
     }
@@ -50,5 +52,28 @@ public class UserService {
     //회원 한명 조회
     public User findById(Long userId) {
         return userRepository.findOne(userId);
+    }
+
+    //아이디로 회원 조회
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
+    //아이디 찾기 -> 이름 전화번호 일치 -> 아이디 공개
+    //이름 & 전화번호로 회원 조회
+    public User findCheckUsername(FindUsernameDto findUsernameDto) {
+        return userRepository.findByNameAndPhone(findUsernameDto).orElse(null);
+    }
+
+    //비밀번호 찾기 -> 아이디 전화번호 일치 -> 비번 일부 공개
+    //아이디 & 전화번호로 회원 조회
+    public User findCheckPassword(FindPasswordDto findPasswordDto) {
+        return userRepository.findByUsernameAndPhone(findPasswordDto).orElse(null);
+    }
+
+    @Transactional
+    public void updatePointUser(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.addPoint(10); //변경 감지
     }
 }
