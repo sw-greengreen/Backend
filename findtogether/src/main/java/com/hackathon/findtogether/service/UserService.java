@@ -1,6 +1,7 @@
 package com.hackathon.findtogether.service;
 
 import com.hackathon.findtogether.domain.User;
+import com.hackathon.findtogether.domain.UserStatus;
 import com.hackathon.findtogether.dto.request.FindPasswordDto;
 import com.hackathon.findtogether.dto.request.FindUsernameDto;
 import com.hackathon.findtogether.dto.request.LoginUserDto;
@@ -72,8 +73,32 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePointUser(Long userId) {
+    public void upgradePointUser(Long userId) {
         User user = userRepository.findOne(userId);
-        user.addPoint(10); //변경 감지
+        user.addPoint(); //변경 감지
+    }
+
+    @Transactional
+    public void downgradePointUser(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.substractPoint(); //변경 감지
+    }
+
+    @Transactional
+    public void updateAchievementDetecter(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.setAchievement(UserStatus.DETECTER); //변경감지
+    }
+
+    @Transactional
+    public void updateAchievementLoser(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.setAchievement(UserStatus.LOSER); //변경감지
+    }
+
+    @Transactional
+    public void updateAchievementBasic(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.setAchievement(UserStatus.BASIC); //변경감지
     }
 }

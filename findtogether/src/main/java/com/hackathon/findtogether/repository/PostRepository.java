@@ -1,6 +1,7 @@
 package com.hackathon.findtogether.repository;
 
 import com.hackathon.findtogether.domain.Post;
+import com.hackathon.findtogether.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
@@ -30,4 +31,5 @@ public class PostRepository {
     public void remove(Post post){
         em.remove(post);
     }
+
 }

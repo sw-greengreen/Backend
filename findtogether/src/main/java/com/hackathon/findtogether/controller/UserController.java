@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -31,7 +30,7 @@ public class UserController {
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .phone(userDto.getPhone())
-                .point(0)
+                .pointcount(0)
                 .achievement(UserStatus.BASIC)
                 .build();
         userService.join(user);
@@ -118,8 +117,17 @@ public class UserController {
     @PutMapping("/auth/updatePoint/{userId}")
     public Response updatePointUser(@PathVariable Long userId) throws Exception {
 
-        userService.updatePointUser(userId);
+        userService.upgradePointUser(userId);
         User user = userService.findById(userId);
+
+        if (user.getPointcount() >= 5)
+            userService.updateAchievementDetecter(userId);
+        else if (user.getPointcount() > -5 && user.getPointcount() < 5)
+            userService.updateAchievementBasic(userId);
+        else if (user.getPointcount() <= -5)
+            userService.updateAchievementLoser(userId);
+
+
         return new Response(200,true,"update user successfully", user);
     }
 }
