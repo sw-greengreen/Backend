@@ -84,7 +84,7 @@ public class UserService {
       
         // 포인트 추가 시 당사자에게 알림 생성
         CreateAlarmDto alarmDto = CreateAlarmDto.builder()
-                .username(username)
+                .username(user.getUsername())
                 .alarmType(AlarmType.POINT)
                 .alarmStatus(1)
                 .message("분실물을 찾아주셨군요! 포인트가 추가되었어요:)")
@@ -116,6 +116,7 @@ public class UserService {
     public void updateAchievementBasic(Long userId) {
         User user = userRepository.findOne(userId);
         user.setAchievement(UserStatus.BASIC); //변경감지
+    }
       
     /*
     public void updatePointUser(String username) {

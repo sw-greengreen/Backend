@@ -35,7 +35,7 @@ public class PostController {
         Post post = postService.findOne(id);
         User user = post.getUser();
 
-        if (post.getPostType() == PostType.DISCOVERY)
+        if (post.getPostType() == PostType.LOST)
             userService.downgradePointUser(user.getId());
 
         if (user.getPointcount() >= 5)
