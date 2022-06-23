@@ -13,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -57,6 +58,9 @@ public class Post {
 
     // 익명 여부
     private String isAnonymous;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     //==게시물 생성 메서드==//
     public static Post createPost(CreatePostDto createPostDto, User user){
