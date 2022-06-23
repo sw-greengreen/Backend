@@ -37,6 +37,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus achievement;
 
+    //==비즈니스 로직==//
+    public void addPoint(int point) {
+        this.point += point;
+    }
+
 //    public static String phone(String src) {
 //        if (src == null) {
 //            return "";

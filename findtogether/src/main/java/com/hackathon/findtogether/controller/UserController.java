@@ -9,13 +9,9 @@ import com.hackathon.findtogether.dto.request.SignupUserDto;
 import com.hackathon.findtogether.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequiredArgsConstructor
@@ -79,5 +75,35 @@ public class UserController {
             //String maskingPassword = findPassword.replaceAll("(?<=.{passwordLen}).", "x");
             return new Response(200, true, "비밀번호를 찾는데 성공하였습니다.", maskingPassword);
         }
+    }
+
+    //    //회원정보 조회 by username (마이페이지)
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping("/auth/{username}")
+//    public Response getUserByUsername(@PathVariable String username) throws Exception {
+//        User user = userService.findByUsername(username);
+//        if (user == null)
+//            return new Response(404,false,"not found user", "");
+//        return new Response(200,true,"found user successfully", user);
+//    }
+
+    //회원정보 조회 by id (마이페이지)
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/auth/{userId}")
+    public Response getUserByUsername(@PathVariable Long userId) throws Exception {
+        User user = userService.findById(userId);
+        if (user == null)
+            return new Response(404,false,"not found user", "");
+        return new Response(200,true,"found user successfully", user);
+    }
+
+    //사용자 포인트 수정 (댓글 채택 시 +10)
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/auth/updatePoint/{userId}")
+    public Response updatePointUser(@PathVariable Long userId) throws Exception {
+
+        userService.updatePointUser(userId);
+        User user = userService.findById(userId);
+        return new Response(200,true,"update user successfully", user);
     }
 }

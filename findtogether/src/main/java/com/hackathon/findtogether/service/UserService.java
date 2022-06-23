@@ -54,13 +54,26 @@ public class UserService {
         return userRepository.findOne(userId);
     }
 
+    //아이디로 회원 조회
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
+
     //아이디 찾기 -> 이름 전화번호 일치 -> 아이디 공개
+    //이름 & 전화번호로 회원 조회
     public User findCheckUsername(FindUsernameDto findUsernameDto) {
         return userRepository.findByNameAndPhone(findUsernameDto).orElse(null);
     }
 
     //비밀번호 찾기 -> 아이디 전화번호 일치 -> 비번 일부 공개
+    //아이디 & 전화번호로 회원 조회
     public User findCheckPassword(FindPasswordDto findPasswordDto) {
         return userRepository.findByUsernameAndPhone(findPasswordDto).orElse(null);
+    }
+
+    @Transactional
+    public void updatePointUser(Long userId) {
+        User user = userRepository.findOne(userId);
+        user.addPoint(10); //변경 감지
     }
 }
