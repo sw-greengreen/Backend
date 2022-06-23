@@ -1,6 +1,7 @@
 package com.hackathon.findtogether.repository;
 
 import com.hackathon.findtogether.domain.Alarm;
+import com.hackathon.findtogether.domain.AlarmType;
 import com.hackathon.findtogether.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -28,10 +29,10 @@ public class AlarmRepository {
                 .getResultList();
     }
 
-    public List<Alarm> findAlarmByAlarmType(String alarmType) {
+    public List<Alarm> findAlarmByAlarmType(AlarmType alarmType, String username) {
         return em.createQuery("select a from Alarm a where a.user.username=:username and a.alarmType =:alarmType",Alarm.class)
+                .setParameter("username",username)
                 .setParameter("alarmType",alarmType)
                 .getResultList();
     }
-
 }

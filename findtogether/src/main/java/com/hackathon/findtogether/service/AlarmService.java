@@ -1,6 +1,7 @@
 package com.hackathon.findtogether.service;
 
 import com.hackathon.findtogether.domain.Alarm;
+import com.hackathon.findtogether.domain.AlarmType;
 import com.hackathon.findtogether.domain.User;
 import com.hackathon.findtogether.dto.request.CreateAlarmDto;
 import com.hackathon.findtogether.dto.request.UpdateAlarmDto;
@@ -59,7 +60,10 @@ public class AlarmService {
     public List<Alarm> findAlarmsByUsername(String username) {
         return alarmRepository.findAlarmByUsername(username);
     }
-    public List<Alarm> findAlarmsByType(String alarmType) {
-        return alarmRepository.findAlarmByAlarmType(alarmType);
+    public List<Alarm> findAlarmsByType(AlarmType alarmType, Long userId) {
+        User user = userRepository.findOne(userId);
+        String username = user.getUsername();
+
+        return alarmRepository.findAlarmByAlarmType(alarmType,username);
     }
 }
